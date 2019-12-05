@@ -1,9 +1,10 @@
 package pl.edu.amu.advjava;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 final class StreamExcercises {
 
@@ -11,35 +12,35 @@ final class StreamExcercises {
          ZADANIE: dla podanej kolekcji zwróć sumę opakowanych liczb.
      */
     static int sum(Collection<CustomNumber> numbers) {
-        throw new UnsupportedOperationException();
+        return numbers.stream().mapToInt(x -> x.getNumber()).sum();
     }
 
     /*
          ZADANIE: dla podanej kolekcji zwróć tylko te nieujemne.
      */
     static List<CustomNumber> positiveNumbers(Collection<CustomNumber> numbers) {
-        throw new UnsupportedOperationException();
+        return numbers.stream().filter(x -> x.isPositive()).collect(Collectors.toList());
     }
 
     /*
          ZADANIE: dla podanej kolekcji zwróć kolekcję zawierającą kwadraty opakowanych liczb.
      */
     static List<Integer> squares(Collection<CustomNumber> numbers) {
-        throw new UnsupportedOperationException();
+        return numbers.stream().map(x -> x.getNumber() * x.getNumber()).collect(toList());
     }
 
     /*
          ZADANIE: dla podanej kolekcji zwróć sumę liczb ujemnych z kolekcji.
      */
     static int sumOfNegativeNumbers(Collection<CustomNumber> numbers) {
-        throw new UnsupportedOperationException();
+        return numbers.stream().filter(x -> x.isNegative()).mapToInt(x -> x.getNumber()).sum();
     }
 
     /*
          ZADANIE: dla podanej kolekcji iloczyn liczb z wszystkich kolekcji.
      */
     static long productOfNumbers(Collection<CustomNumberCollection> customNumberCollection) {
-        throw new UnsupportedOperationException();
+        return customNumberCollection.stream().flatMap(x -> x.getCustomNumbers().stream()).mapToInt(x -> x.getNumber()).reduce(1, (x,y) -> x * y);
     }
 
     /*
@@ -47,7 +48,7 @@ final class StreamExcercises {
          które są pierwiastkami kwadratowymi tej liczby.
      */
     static Map<Integer, Set<Integer>> squareRoots(Collection<CustomNumber> numbers) {
-        throw new UnsupportedOperationException();
+        return numbers.stream().map(CustomNumber::getNumber).collect(groupingBy(x -> x*x, toCollection(HashSet::new)));
     }
 
     static final class CustomNumber {
@@ -56,6 +57,8 @@ final class StreamExcercises {
         CustomNumber(int number) {
             this.number = number;
         }
+
+        int getNumber() { return this.number; }
 
         boolean isPositive() {
             return number >= 0;
